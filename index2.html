@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge 2 | Promise practice</title>
+  </head>
+  <body>
+    <h1>Open the console</h1>
+    <script>
+      // fetch the data using GET request, don't need body and header
+      URL = 'https://pokeapi.co/api/v2/pokemon/pikachu'
+      fetch(URL)
+            .then(response => {
+              if (response.ok !== true) {
+                throw new Error(`Pokémon not found: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              //get tthe species url and make a second request
+              return fetch(data.species.url);
+            })
+            .then((speciesResponse) => {
+              if (!speciesResponse.ok) {
+                throw new Error("Species data not found: ${speciesResponse.status}");
+              }
+              return speciesResponse.json();
+            })
+            .then((speciesData) => {
+              //get the shape URL and make third request
+              return fetch(speciesData.shape.url);
+            })
+            .then((shapeResponse) => {
+              if (!shapeResponse.ok) {
+                throw new Error(`Shape data not found: ${shapeResponse.status}`)
+              }
+              return shapeResponse.json();
+            })
+            .then((shapeData) => console.log(shapeData))
+            .catch((error) => {
+              console.error("Error:", error.message); // Show error message 
+            });
+    </script>
+  </body>
+</html>
